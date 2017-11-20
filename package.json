@@ -1,0 +1,22 @@
+{
+  "name": "parcer",
+  "version": "1.0.0",
+  "description": "web parcer for news",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frostersky/parcer.git"
+  },
+  "author": "frostersky",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frostersky/parcer/issues"
+  },
+  "homepage": "https://github.com/frostersky/parcer#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
