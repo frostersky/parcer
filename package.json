@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/frostersky/parcer#readme",
   "dependencies": {
-    "express": "^4.16.2"
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.2",
+    "needle": "^2.0.1",
+    "tress": "^1.0.5"
   }
 }
