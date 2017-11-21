@@ -15,30 +15,45 @@ var q = tress(function(url, callback){
 
         // парсим DOM
         var $ = cheerio.load(res.body);
-
-        var news = $('.top-topic__news-item');
-        news.each(function(i, element){
-            var content = $(element).children();
-            var href = rambler_news_url+$(content).attr('href');
-            var imageRef = $($($($(content).children()[0]).children()[0]).children()[0]).attr('data-src');
-            var topic = $($($($(content).children()[1]).children()[0]).children()[0]).text();
-
-            if(href != undefined && topic != undefined && imageRef != undefined){
-                console.log('----------------------');
-                console.log('topic: '+topic);
-                console.log('imageRef: '+imageRef);
-                console.log('href: '+href);
-            }
-
-        });
         
+        //поиск заголовка
+        var bigTitleText = $('.big-title__title').text();
+        var bigTitleSourceText = $('.big-title__source').text();
+        var bigTitleSourceRef = $('.big-title__source').attr('href');
 
+        //поиск текста
+        var newsText = $('.article__content').text();
+
+        if(bigTitleText != undefined && bigTitleSourceText != undefined && bigTitleSourceRef != undefined && newsText != undefined){
+            console.log('----------------------');
+            console.log(bigTitleText);
+            console.log(bigTitleSourceText + ' - '+ bigTitleSourceRef);
+            console.log(newsText);
+        }
         callback();
     });
-}, 1); // запускаем 10 параллельных потоков
+}, 10); // запускаем 10 параллельных потоков
 
-q.drain = function(){
-    fs.writeFileSync('./data.json', JSON.stringify(results, null, 4));
-}
+needle.get(voronezh, function(err, res){
+    if (err) throw err;
 
-q.push(voronezh);
+    // парсим DOM
+    var $ = cheerio.load(res.body);
+
+    var news = $('.top-topic__news-item');
+    news.each(function(i, element){
+        var content = $(element).children();
+        var href = rambler_news_url+$(content).attr('href');
+        var imageRef = $($($($(content).children()[0]).children()[0]).children()[0]).attr('data-src');
+        var topic = $($($($(content).children()[1]).children()[0]).children()[0]).text();
+
+        if(href != undefined && topic != undefined && imageRef != undefined){
+            console.log('----------------------');
+            console.log('topic: '+topic);
+            console.log('imageRef: '+imageRef);
+            console.log('href: '+href);
+            q.push(href);
+        }
+
+    });
+});
