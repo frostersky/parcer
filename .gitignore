@@ -1,0 +1,6 @@
+#Ignore modules
+node_modules/
+
+#Ignore file json files except package.json
+!package.json
+*.json
