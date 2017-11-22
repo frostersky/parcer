@@ -19,7 +19,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.2",
-    "feed-read-parser": "0.0.6",
+    "feedparser-promised": "^1.4.2",
     "fs-extra": "^4.0.2",
     "needle": "^2.0.1",
     "tress": "^1.0.5"
