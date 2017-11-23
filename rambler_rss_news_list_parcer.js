@@ -43,22 +43,37 @@ function update_data(){
 
 
 function load_rambler_news(data_news){
-    var city_link = new Map();
     data_news = JSON.parse(data_news);
-    for(i in data_news){
-        city_link.set(data_news[i].rss_ref, data_news[i].city_name)
-    }
-    for (var url of city_link.keys()) {
+    var q = tress(function(data, callback){
         var options = {
-            'uri': url,
-          };
+            'uri': data.rss_ref,
+        };
+        console.log(data.city_name+'_'+data.rss_ref);
         feedparser.parse(options)
-            .then( (items) => { 
-                fs.writeJson('./rambler_news/'+city_link.get(url)+'.json', rss.items); 
-                console.log(city_link.get(url)+'_'+url);
-            });
-    }  
+        .then( (items) => { 
+            var rss_list = [];
+            for(i in items){
+                rss_list.push({
+                    'guid' : items[i].guid,
+                    'title' : items[i].title,
+                    'description' : items[i].description,
+                    'link' : items[i].link,
+                    'author' : items[i].author,
+                    'date' : items[i].date
+                }) 
+            }
+            var data_news = JSON.stringify(rss_list, null, 6);
+            fs.writeJson('./rambler_news/'+data.city_name+'.json', data_news);
+        });
+    }, data_news.length);
+    for(i in data_news){
+        //city_link.set(data_news[i].rss_ref, data_news[i].city_name)
+        q.push(data_news[i])
+        console.log(i);
+    }
 }
+
+
 
 exports.load_rambler_news = function(city_name){
     fs.ensureFile(data_news_loc)
