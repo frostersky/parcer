@@ -2,6 +2,7 @@ var needle = require('needle');
 var cheerio = require('cheerio');
 var fs = require('fs-extra');
 var feedparser = require('feedparser-promised');
+var tress = require('tress');
 
 var rambler_rss_url = 'https://news.rambler.ru/rss/?updated';
 var data_news_loc = './rambler_rss_news_links.json';
@@ -41,20 +42,33 @@ function update_data(){
 }
 
 
-function load_rambler_news(data_news, city_name){
-    console.log(data_news);
-    console.log(city_name);
+function load_rambler_news(data_news){
+    var city_link = new Map();
+    data_news = JSON.parse(data_news);
+    for(i in data_news){
+        city_link.set(data_news[i].rss_ref, data_news[i].city_name)
+    }
+    for (var url of city_link.keys()) {
+        var options = {
+            'uri': url,
+          };
+        feedparser.parse(options)
+            .then( (items) => { 
+                fs.writeJson('./rambler_news/'+city_link.get(url)+'.json', rss.items); 
+                console.log(city_link.get(url)+'_'+url);
+            });
+    }  
 }
 
 exports.load_rambler_news = function(city_name){
     fs.ensureFile(data_news_loc)
     .then(
-        () => load_rambler_news(require(data_news_loc), city_name)        
+        () => load_rambler_news(require(data_news_loc))        
     )
     .catch(
         err => {
             update_data()
-                .then(data_news => load_rambler_news(data_news, city_name));
+                .then(data_news => load_rambler_news(data_news));
         }
     );    
 } 
