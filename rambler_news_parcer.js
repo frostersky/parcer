@@ -67,15 +67,13 @@ function load_rambler_news(data_news){
         });
     }, data_news.length);
     for(i in data_news){
-        //city_link.set(data_news[i].rss_ref, data_news[i].city_name)
         q.push(data_news[i])
-        console.log(i);
     }
 }
 
 
 
-exports.load_rambler_news = function(city_name){
+exports.load_rambler_news = function(){
     fs.ensureFile(data_news_loc)
     .then(
         () => load_rambler_news(require(data_news_loc))        
@@ -87,3 +85,13 @@ exports.load_rambler_news = function(city_name){
         }
     );    
 } 
+
+exports.get_rambler_preview_news = function(city, callback){
+   return fs.readJson('./rambler_news/'+city+'.json')
+    .then(packageObj => {
+        callback(packageObj);
+    })
+    .catch(err => {
+        console.error(err)
+    })
+}
