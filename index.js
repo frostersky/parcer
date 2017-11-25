@@ -1,5 +1,6 @@
-var rambler_news_parcer = require('./rambler_news_parcer');
-rambler_news_parcer.load_rambler_news(rambler_news_parcer.news_type);
+var rambler_news_parser = require('./main_rambler_news_parser');
+//var test = require('./test');
+rambler_news_parser.load_preview_news;
 /*rambler_rss.get_rambler_preview_news('Воронеж', function(packageObj){
     console.log(packageObj);
 });*/
