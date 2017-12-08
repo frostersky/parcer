@@ -110,7 +110,15 @@ function read_data(data){
 
 function getNews(region){
     var region_path = news_preview_path+region+'.json';
-    return require(region_path);
+    var region_news;
+    try{
+        region_news = require(region_path);
+        return region_news;
+    }
+    catch(err){
+        throw err;
+    }
+    
 }
 
 exports.load_preview_news = load_preview_news;

@@ -9,8 +9,8 @@ app.listen(1337, function(){
 });
 
 
-app.get('/news/getRamblerNews', function (req, res) {
-    var news = rambler_news_parser.getNews('Воронеж');
+app.get('/news/getRamblerNews/:region', function (req, res) {
+    var news = rambler_news_parser.getNews(req.params.region);
     res.send(news);
 });
 
