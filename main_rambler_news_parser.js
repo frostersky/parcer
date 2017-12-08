@@ -36,6 +36,8 @@ function update_data(){
 
         q.drain = function(){            
             fs.writeFileSync(news_links_path, JSON.stringify(results, null, 2));
+            var data_news = require(news_links_path); 
+            resolve(data_news);
         }
 
         for( var i = 2; i <= 322; i++){
@@ -45,15 +47,27 @@ function update_data(){
     });    
 }
 
-exports.load_preview_news = load_preview_news();
-function load_preview_news(){    
-    var data_news = require(news_links_path);   
-    for(i in data_news){
-        read_data(data_news[i])
-    }    
+function load_preview_news(){  
+    fs.pathExists(news_links_path, (err, exists) => {
+        if(!exists){
+            update_data()
+            .then(data_news => {
+                for(i in data_news){
+                    read_data(data_news[i])
+                }    
+            })
+        }
+        else {
+            var data_news = require(news_links_path);
+            for(i in data_news){
+                read_data(data_news[i])
+            } 
+        }
+    })      
 }
 
 function read_data(data){
+    fs.ensureDirSync(news_preview_path);
     var results =[]; 
     var q = tress(function(url, callback){
         needle.get(url, function(err, resp){
@@ -83,9 +97,8 @@ function read_data(data){
     });
     
     q.drain = function(){
-        counter = counter+5;
-        console.log(counter);
         fs.writeFileSync(news_preview_path + data.region+'.json', JSON.stringify(results, null, 3));
+        console.log(data.region+' news updated');
     } 
     
     for(var i=1; i<=5 ;i++){                       
@@ -94,3 +107,12 @@ function read_data(data){
     }
 
 }
+
+function getNews(region){
+    var region_path = news_preview_path+region+'.json';
+    return require(region_path);
+}
+
+exports.load_preview_news = load_preview_news;
+exports.getNews = getNews;
+
