@@ -126,17 +126,22 @@ function read_data(data){
 
 }
 
-function getNews(region){
-    var region_news;
+function getTextNews(news_id){
     
-    mongoClient.connect(mongoDbUrl)
-    .then( db => {
+}
+
+function getNews(region){
+    return new Promise(function(resolve, reject){
+
+        mongoClient.connect(mongoDbUrl, function(err, db) {
+            if(err) reject(err);
             var rambler_db = db.db('rambler_news');
-            region_news = rambler_db.collection('news_preview').find({'region':region});
-            db.close();
-            return region_news;
-        }
-    );
+            rambler_db.collection('news_preview').find({'region':region}).toArray(function(error, rambler_news){
+                db.close();
+                resolve(rambler_news);
+            });                        
+        });         
+    });
 }
     
     

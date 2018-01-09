@@ -11,8 +11,8 @@ app.listen(1337, function(){
 
 app.get('/news/getRamblerNews/:region', function (req, res) {
     console.log('GET startded for '+req.params.region);
-    var news = rambler_news_parser.getNews(req.params.region);
-    res.send(news);
+    rambler_news_parser.getNews(req.params.region)
+    .then(rambler_news => res.send(rambler_news));    
 });
 
 
