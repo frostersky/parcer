@@ -1,4 +1,4 @@
-var rambler_news_parser = require('./main_rambler_news_parser');
+var rambler_news_parser = require('./db_rambler_news_parser');
 var express = require('express');
 var app = express();
 

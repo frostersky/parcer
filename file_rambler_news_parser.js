@@ -3,6 +3,9 @@ var needle = require('needle');
 var cheerio = require('cheerio');
 var fs = require('fs-extra');
 var tress = require('tress');
+var mongoClient = require('mongodb').MongoClient;
+var mongoDbUrl = "mongodb://localhost:27017/mydb";
+
 
 var rambler_news_url_for_regions = 'https://news.rambler.ru/top/region/';
 var rambler_news_url = 'https://news.rambler.ru';
@@ -16,6 +19,7 @@ function update_data(){
         console.log('Start updating database...')
         
         var results = [];
+
 
         var q = tress(function(url, callback){
             needle.get(url, function(err, resp){
