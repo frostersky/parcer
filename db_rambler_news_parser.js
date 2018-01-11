@@ -95,7 +95,7 @@ function read_data(data){
         
                 if(href != undefined && topic != undefined && imageRef != undefined){
                     results.push( {
-                        'topic': topic,
+                        'topic': topic.substr(1, topic.length-2),
                         'imageRef':imageRef,
                         'href': href,
                         'region':data.region
